@@ -4,7 +4,9 @@ public class Customer extends Person{
 
     int balance;
 
-    public Customer(){
+    public Customer(int money){
+
+        this.balance = money;
 
     }
 

@@ -1,5 +1,7 @@
 package ro.jademy.carsMakers;
 
+import java.util.Objects;
+
 public class Engine {
 
        private int capacity;
@@ -24,5 +26,18 @@ public class Engine {
 
        public String getType() {
               return type;
+       }
+
+       @Override
+       public boolean equals(Object o) {
+              if (this == o) return true;
+              if (!(o instanceof Engine)) return false;
+              Engine engine = (Engine) o;
+              return Objects.equals(type, engine.type);
+       }
+
+       @Override
+       public int hashCode() {
+              return Objects.hash(type);
        }
 }

@@ -5,6 +5,7 @@ import ro.jademy.carsMakers.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Shop {
@@ -23,29 +24,29 @@ public class Shop {
             fileScan = new Scanner(new File("src/passwords.txt"));
             while(fileScan.hasNext()){
                 String line = fileScan.nextLine();
-                String[] credentials = line.split(" ");
+                String[] credentials = line.split(",");
                 Salesman salesman = new Salesman(credentials[2],credentials[3],credentials[0],credentials[1]);
                 salesmenList.add(salesman);
             }
             fileScan = new Scanner(new File("src/cars.txt"));
             while (fileScan.hasNext()){
                 String line = fileScan.nextLine();
-                String[] carP = line.split(" ");
+                String[] carP = line.split(",");
                // for(int i = 0; i < carP.length; i++)
                    // System.out.println(carP[i]);
                 switch (carP[0]){
                     case "BMW" : {
-                        Car car = new BMW(carP[0],carP[1],Integer.parseInt(carP[2]),carP[3],Integer.parseInt(carP[4]),carP[5],carP[6],new Engine(Integer.parseInt(carP[7]),carP[8]),carP[9]);
+                        Car car = new BMW(carP[0],carP[1],Integer.parseInt(carP[2]),carP[3],Integer.parseInt(carP[4]),carP[5],carP[6],new Engine(Integer.parseInt(carP[7]),carP[8]),carP[9],carP[10]);
                         carsList.add(car);
                         break;
                     }
                     case "Bentley" :{
-                        Car car = new Bentley(carP[0],carP[1],Integer.parseInt(carP[2]),carP[3],Integer.parseInt(carP[4]),carP[5],carP[6],new Engine(Integer.parseInt(carP[7]),carP[8]),carP[9]);
+                        Car car = new Bentley(carP[0],carP[1],Integer.parseInt(carP[2]),carP[3],Integer.parseInt(carP[4]),carP[5],carP[6],new Engine(Integer.parseInt(carP[7]),carP[8]),carP[9],carP[10]);
                         carsList.add(car);
                         break;
                     }
                     case "DaciaLogan" :{
-                        Car car = new DaciaLogan(carP[0],carP[1],Integer.parseInt(carP[2]),carP[3],Integer.parseInt(carP[4]),carP[5],carP[6],new Engine(Integer.parseInt(carP[7]),carP[8]),carP[9]);
+                        Car car = new DaciaLogan(carP[0],carP[1],Integer.parseInt(carP[2]),carP[3],Integer.parseInt(carP[4]),carP[5],carP[6],new Engine(Integer.parseInt(carP[7]),carP[8]),carP[9],carP[10]);
                         carsList.add(car);
                         break;
                     }
@@ -57,16 +58,16 @@ public class Shop {
         }
     }
 
+
     public boolean login(String username, String password) {
 
-        // TODO: implement a basic user login
         try{
             fileScan = new Scanner(new File("src/passwords.txt"));
             while(fileScan.hasNext()){
                 String line = fileScan.nextLine(); // creem string cu datele de pe linie
-                String[] credentials = line.split(" "); // impartim linia dupa spatii
+                String[] credentials = line.split(","); // impartim linia dupa spatii
                 if(username.equalsIgnoreCase(credentials[0]) && password.equals(credentials[1])){
-                    System.out.println("Te-ai logat cu succes");
+                    System.out.println("Succesfuly login");
                     return true;
                 }
             }
@@ -119,7 +120,7 @@ public class Shop {
                     //checkIncome();
                 }
                 case 5 : {
-                   // showListMenuOptions();
+                    showListMenuOptions();
                     break;
                 }
                 case 6 : {
@@ -141,9 +142,33 @@ public class Shop {
         System.out.println("2. Filter by model");
         System.out.println("3. Filter by price");
         System.out.println("4. Filter by engineType");
+        System.out.println("5. Return to menu");
         // TODO: add additional filter methods based on car specs
-
+        boolean ok = false;
+        Scanner scan = new Scanner(System.in);
         Integer option = scan.nextInt();
+        switch (option) {
+            case 1: {
+                showCarsByMakerFilter();
+                break;
+            }
+            case 2 : {
+                showCarsByModelFilter();
+                break;
+            }
+            case 3 : {
+               showCarsByPriceFilter();
+                break;
+            }
+            case 4 : {
+               showCarsByEngineType();
+                break;
+            }
+            case 5 : {
+                showMenu();
+            }
+        }
+
 
     }
 
@@ -176,5 +201,86 @@ public class Shop {
                 System.out.println(car.toString());
             }
         }
+    }
+
+    public void showCarsByMakerFilter(){
+        System.out.println("Introduceti producatorul dorit: ");
+        Scanner scan = new Scanner(System.in);
+        String filter = scan.nextLine();
+        ArrayList<Car> filteredCars = new ArrayList<>();
+        for (Car car: carsList) {
+            if (car.getMake().equalsIgnoreCase(filter)){
+                filteredCars.add(car);
+            }
+        }
+        if(filteredCars.isEmpty()){
+            System.out.println("Nicio masina gasita dupa criteriile cautate. ");
+        } else {
+            for (Car car: filteredCars) {
+                System.out.println(car.toString());
+            }
+        }
+        showMenu();
+    }
+    public void showCarsByModelFilter(){
+        System.out.println("Introduceti modelul dorit: ");
+        Scanner scan = new Scanner(System.in);
+        String filter = scan.nextLine();
+        ArrayList<Car> filteredCars = new ArrayList<>();
+        for (Car car: carsList) {
+            if (car.getModel().equalsIgnoreCase(filter)){
+                filteredCars.add(car);
+            }
+        }
+        if(filteredCars.isEmpty()){
+            System.out.println("Nicio masina gasita dupa criteriile cautate. ");
+        } else {
+            for (Car car : filteredCars) {
+                System.out.println(car.toString());
+            }
+        }
+        showMenu();
+    }
+    public void showCarsByPriceFilter(){
+        System.out.println("Introduceti suma maxima dorita: ");
+        Scanner scan = new Scanner(System.in);
+        int filter = scan.nextInt();
+        ArrayList<Car> filteredCars = new ArrayList<>();
+        for (Car car: carsList) {
+            if (Integer.parseInt(car.getBasePrice()) < filter){
+                filteredCars.add(car);
+            }
+        }
+        if (filteredCars.isEmpty()){
+            System.out.println("Nicio masina gasita dupa criteriile cautate.");
+        } else {
+            for (Car car : filteredCars) {
+                System.out.println(car.toString());
+            }
+        }
+        showMenu();
+    }
+    public void showCarsByEngineType(){
+        System.out.println("Introduceti tipul de motor: ");
+
+        Scanner scan = new Scanner(System.in);
+        String filter = scan.nextLine();
+        List<Car> filteredCars = new ArrayList<>();
+        for (Car car: carsList) {
+            if (car.getEngine().getType().equalsIgnoreCase(filter)) {
+                filteredCars.add(car);
+            }
+        }
+
+        if(filteredCars.isEmpty()){
+            System.out.println("Nicio masina gasita dupa criteriile cautate.");
+            // TODO adaugare variante alternative
+        }
+        else {
+            for (Car car: filteredCars) {
+                System.out.println(car.toString());
+            }
+        }
+        showMenu();
     }
 }

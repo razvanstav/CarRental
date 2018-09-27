@@ -10,7 +10,9 @@ public class Main {
         String user ;
         String password;
         do {
+            System.out.println("Insert user:");
             user = scan.nextLine();
+            System.out.println("Insert pass");
             password = scan.nextLine();
 
         } while (!shop.login(user,password));
