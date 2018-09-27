@@ -1,8 +1,20 @@
 package ro.jademy.carrental;
 
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
-        // Q: this is the main entry point of our program. What should we do here?
+        Shop shop = new Shop();
+        Scanner scan = new Scanner(System.in);
+        String user ;
+        String password;
+        do {
+            user = scan.nextLine();
+            password = scan.nextLine();
+
+        } while (!shop.login(user,password));
+
+        shop.showMenu();
     }
 }
