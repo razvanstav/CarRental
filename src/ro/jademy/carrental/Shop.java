@@ -16,44 +16,42 @@ public class Shop {
     private Scanner fileScan;
     private ArrayList<Salesman> salesmenList = new ArrayList<>();
     private ArrayList<Car> carsList = new ArrayList<>();
-    private ArrayList<Integer> availableCar = new ArrayList<>();
 
-    public Shop(){
+    public Shop() {
 
-        try{
+        try {
             fileScan = new Scanner(new File("src/passwords.txt"));
-            while(fileScan.hasNext()){
+            while (fileScan.hasNext()) {
                 String line = fileScan.nextLine();
                 String[] credentials = line.split(",");
-                Salesman salesman = new Salesman(credentials[2],credentials[3],credentials[0],credentials[1]);
+                Salesman salesman = new Salesman(credentials[2], credentials[3], credentials[0], credentials[1]);
                 salesmenList.add(salesman);
             }
             fileScan = new Scanner(new File("src/cars.txt"));
-            while (fileScan.hasNext()){
+            while (fileScan.hasNext()) {
                 String line = fileScan.nextLine();
                 String[] carP = line.split(",");
-               // for(int i = 0; i < carP.length; i++)
-                   // System.out.println(carP[i]);
-                switch (carP[0]){
-                    case "BMW" : {
-                        Car car = new BMW(carP[0],carP[1],Integer.parseInt(carP[2]),carP[3],Integer.parseInt(carP[4]),carP[5],carP[6],new Engine(Integer.parseInt(carP[7]),carP[8]),carP[9],carP[10]);
+                // for(int i = 0; i < carP.length; i++)
+                // System.out.println(carP[i]);
+                switch (carP[0]) {
+                    case "BMW": {
+                        Car car = new BMW(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]), carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), carP[9], carP[10]);
                         carsList.add(car);
                         break;
                     }
-                    case "Bentley" :{
-                        Car car = new Bentley(carP[0],carP[1],Integer.parseInt(carP[2]),carP[3],Integer.parseInt(carP[4]),carP[5],carP[6],new Engine(Integer.parseInt(carP[7]),carP[8]),carP[9],carP[10]);
+                    case "Bentley": {
+                        Car car = new Bentley(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]), carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), carP[9], carP[10]);
                         carsList.add(car);
                         break;
                     }
-                    case "DaciaLogan" :{
-                        Car car = new DaciaLogan(carP[0],carP[1],Integer.parseInt(carP[2]),carP[3],Integer.parseInt(carP[4]),carP[5],carP[6],new Engine(Integer.parseInt(carP[7]),carP[8]),carP[9],carP[10]);
+                    case "DaciaLogan": {
+                        Car car = new DaciaLogan(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]), carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), carP[9], carP[10]);
                         carsList.add(car);
                         break;
                     }
                 }
             }
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -61,12 +59,12 @@ public class Shop {
 
     public boolean login(String username, String password) {
 
-        try{
+        try {
             fileScan = new Scanner(new File("src/passwords.txt"));
-            while(fileScan.hasNext()){
+            while (fileScan.hasNext()) {
                 String line = fileScan.nextLine(); // creem string cu datele de pe linie
                 String[] credentials = line.split(","); // impartim linia dupa spatii
-                if(username.equalsIgnoreCase(credentials[0]) && password.equals(credentials[1])){
+                if (username.equalsIgnoreCase(credentials[0]) && password.equals(credentials[1])) {
                     System.out.println("Succesfuly login");
                     return true;
                 }
@@ -82,11 +80,10 @@ public class Shop {
     }
 
 
-
     public void showMenu() {
         boolean ok = true;
 
-        while(ok) {
+        while (ok) {
             System.out.println(" -----------------------------------------------");
             System.out.println("|    Welcome to the Jademy Car Rental Service   |");
             System.out.println(" -----------------------------------------------");
@@ -97,14 +94,15 @@ public class Shop {
             System.out.println("3. List rented cars");
             System.out.println("4. Check income");
             System.out.println("5. Options");
-            System.out.println("6. Logout");
-            System.out.println("7. Exit");
+            System.out.println("6. Rent a car");
+            System.out.println("7. Logout ");
+            System.out.println("8. Exit");
 
             Scanner scan = new Scanner(System.in);
             int option = scan.nextInt();
 
-            switch(option){
-                case 1 : {
+            switch (option) {
+                case 1: {
                     listAllCars();
                     break;
                 }
@@ -112,22 +110,27 @@ public class Shop {
                     listAvailableCars();
                     break;
                 }
-                case 3 : {
+                case 3: {
                     listRentedCars();
                     break;
                 }
-                case 4 : {
+                case 4: {
                     //checkIncome();
                 }
-                case 5 : {
+                case 5: {
                     showListMenuOptions();
                     break;
                 }
-                case 6 : {
+                case 6: {
+                    Scanner option1 = new Scanner(System.in);
+                    rentACar(option1.nextLine());
+                    break;
+                }
+                case 7: {
                     // logout();
                     break;
                 }
-                case 7 : {
+                case 8: {
                     ok = false;
                     break;
                 }
@@ -144,7 +147,6 @@ public class Shop {
         System.out.println("4. Filter by engineType");
         System.out.println("5. Return to menu");
         // TODO: add additional filter methods based on car specs
-        boolean ok = false;
         Scanner scan = new Scanner(System.in);
         Integer option = scan.nextInt();
         switch (option) {
@@ -152,27 +154,27 @@ public class Shop {
                 showCarsByMakerFilter();
                 break;
             }
-            case 2 : {
+            case 2: {
                 showCarsByModelFilter();
                 break;
             }
-            case 3 : {
-               showCarsByPriceFilter();
+            case 3: {
+                showCarsByPriceFilter();
                 break;
             }
-            case 4 : {
-               showCarsByEngineType();
+            case 4: {
+                showCarsByEngineType();
                 break;
             }
-            case 5 : {
-                showMenu();
+            case 5: {
+                break;
             }
         }
 
 
     }
 
-    public void calculatePrice(int numberOfDays) {
+    public int calculatePrice(int numberOfDays) {
         // TODO: apply a discount to the base price of a car based on the number of rental days
         // TODO: document the implemented discount algorithm
 
@@ -182,57 +184,40 @@ public class Shop {
         // Q: what should be the return type of this method?
     }
 
-    public void listAllCars(){
-        for (Car car: carsList) {
+    public void listAllCars() {
+        for (Car car : carsList) {
             System.out.println(car.toString());
         }
     }
-    public void listAvailableCars(){
+
+    public void listAvailableCars() {
         for (Car car : carsList) {
-            if(!car.getIsRented()){
+            if (!car.getIsRented()) {
                 System.out.println(car.toString());
             }
 
         }
     }
-    public void listRentedCars(){
+
+    public void listRentedCars() {
         for (Car car : carsList) {
-            if(car.getIsRented()){
+            if (car.getIsRented()) {
                 System.out.println(car.toString());
             }
         }
     }
 
-    public void showCarsByMakerFilter(){
+    public void showCarsByMakerFilter() {
         System.out.println("Introduceti producatorul dorit: ");
         Scanner scan = new Scanner(System.in);
         String filter = scan.nextLine();
         ArrayList<Car> filteredCars = new ArrayList<>();
-        for (Car car: carsList) {
-            if (car.getMake().equalsIgnoreCase(filter)){
+        for (Car car : carsList) {
+            if (car.getMake().equalsIgnoreCase(filter)) {
                 filteredCars.add(car);
             }
         }
-        if(filteredCars.isEmpty()){
-            System.out.println("Nicio masina gasita dupa criteriile cautate. ");
-        } else {
-            for (Car car: filteredCars) {
-                System.out.println(car.toString());
-            }
-        }
-        showMenu();
-    }
-    public void showCarsByModelFilter(){
-        System.out.println("Introduceti modelul dorit: ");
-        Scanner scan = new Scanner(System.in);
-        String filter = scan.nextLine();
-        ArrayList<Car> filteredCars = new ArrayList<>();
-        for (Car car: carsList) {
-            if (car.getModel().equalsIgnoreCase(filter)){
-                filteredCars.add(car);
-            }
-        }
-        if(filteredCars.isEmpty()){
+        if (filteredCars.isEmpty()) {
             System.out.println("Nicio masina gasita dupa criteriile cautate. ");
         } else {
             for (Car car : filteredCars) {
@@ -241,17 +226,38 @@ public class Shop {
         }
         showMenu();
     }
-    public void showCarsByPriceFilter(){
+
+    public void showCarsByModelFilter() {
+        System.out.println("Introduceti modelul dorit: ");
+        Scanner scan = new Scanner(System.in);
+        String filter = scan.nextLine();
+        ArrayList<Car> filteredCars = new ArrayList<>();
+        for (Car car : carsList) {
+            if (car.getModel().equalsIgnoreCase(filter)) {
+                filteredCars.add(car);
+            }
+        }
+        if (filteredCars.isEmpty()) {
+            System.out.println("Nicio masina gasita dupa criteriile cautate. ");
+        } else {
+            for (Car car : filteredCars) {
+                System.out.println(car.toString());
+            }
+        }
+        showMenu();
+    }
+
+    public void showCarsByPriceFilter() {
         System.out.println("Introduceti suma maxima dorita: ");
         Scanner scan = new Scanner(System.in);
         int filter = scan.nextInt();
         ArrayList<Car> filteredCars = new ArrayList<>();
-        for (Car car: carsList) {
-            if (Integer.parseInt(car.getBasePrice()) < filter){
+        for (Car car : carsList) {
+            if (Integer.parseInt(car.getBasePrice()) < filter) {
                 filteredCars.add(car);
             }
         }
-        if (filteredCars.isEmpty()){
+        if (filteredCars.isEmpty()) {
             System.out.println("Nicio masina gasita dupa criteriile cautate.");
         } else {
             for (Car car : filteredCars) {
@@ -260,27 +266,52 @@ public class Shop {
         }
         showMenu();
     }
-    public void showCarsByEngineType(){
+
+    public void showCarsByEngineType() {
         System.out.println("Introduceti tipul de motor: ");
 
         Scanner scan = new Scanner(System.in);
         String filter = scan.nextLine();
         List<Car> filteredCars = new ArrayList<>();
-        for (Car car: carsList) {
+        for (Car car : carsList) {
             if (car.getEngine().getType().equalsIgnoreCase(filter)) {
                 filteredCars.add(car);
             }
         }
 
-        if(filteredCars.isEmpty()){
+        if (filteredCars.isEmpty()) {
             System.out.println("Nicio masina gasita dupa criteriile cautate.");
             // TODO adaugare variante alternative
-        }
-        else {
-            for (Car car: filteredCars) {
+        } else {
+            for (Car car : filteredCars) {
                 System.out.println(car.toString());
             }
         }
         showMenu();
+    }
+
+    public void rentACar(String nameOfTheCar) {
+        int index = availableCar(nameOfTheCar);
+        if (index != -1) {
+            System.out.println("Are you sure you want to rent this car?");
+            Scanner scan = new Scanner(System.in);
+            String answer = scan.nextLine();
+            if (answer.equalsIgnoreCase("yes")) {
+                carsList.get(index).setRented(true);
+            }
+
+        } else {
+            System.out.println("We do not have this care!");
+        }
+    }
+
+
+    public int availableCar(String nameOfTheCar) {
+        for (int i = 0; i < carsList.size(); i++) {
+            if (carsList.get(i).getMake().equalsIgnoreCase(nameOfTheCar)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

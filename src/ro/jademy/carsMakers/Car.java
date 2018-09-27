@@ -76,6 +76,10 @@ public abstract class Car {
             return doorNumber;
         }
 
+    public void setRented(boolean rented) {
+        isRented = rented;
+    }
+
     public String getBasePrice() {
         return basePrice;
     }
