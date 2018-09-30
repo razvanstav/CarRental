@@ -162,7 +162,7 @@ public class Shop {
                 break;
             }
             case 3: {
-                showCarsByPriceFilter();
+                showMenuFilterByPrice();
                 break;
             }
             case 4: {
@@ -174,6 +174,41 @@ public class Shop {
             }
         }
 
+
+    }
+
+    public void showMenuFilterByPrice() {
+
+        System.out.println("Select an option from below");
+        System.out.println("1. Descending order");
+        System.out.println("2. Ascending order");
+        System.out.println("3. Show under specified price");
+        System.out.println("4. Show over specified price");
+        System.out.println("5. Return to menu");
+        Scanner scan = new Scanner(System.in);
+        int option = scan.nextInt();
+
+        switch (option) {
+            case 1: {
+                filterByDescending();
+                break;
+            }
+            case 2: {
+                filterByAscending();
+                break;
+            }
+            case 3: {
+                showCarsUnderPrice();
+                break;
+            }
+            case 4: {
+                showCarsOverPrice();
+                break;
+            }
+            case 5: {
+                break;
+            }
+        }
 
     }
 
@@ -274,8 +309,8 @@ public class Shop {
         }
     }
 
-    public void showCarsByPriceFilter() {
-        System.out.println("Introduceti suma maxima dorita: ");
+    public void showCarsUnderPrice() {
+        System.out.println("Enter maximum amount: ");
         Scanner scan = new Scanner(System.in);
         int filter = scan.nextInt();
         ArrayList<Car> filteredCars = new ArrayList<>();
@@ -285,13 +320,41 @@ public class Shop {
             }
         }
 
-            showTable();
-            for (Car car : filteredCars) {
-                car.prettyCarList();
-                System.out.println();
+        showTable();
+        for (Car car : filteredCars) {
+            car.prettyCarList();
+            System.out.println();
+        }
+    }
+    public void showCarsOverPrice() {
+        System.out.println("Enter minimum amount: ");
+        Scanner scan = new Scanner(System.in);
+        int filter = scan.nextInt();
+        ArrayList<Car> filteredCars = new ArrayList<>();
+        for (Car car : carsList) {
+            if (car.getBasePrice() > filter) {
+                filteredCars.add(car);
             }
         }
 
+        showTable();
+        for (Car car : filteredCars) {
+            car.prettyCarList();
+            System.out.println();
+        }
+    }
+
+
+
+    public void filterByDescending(){
+
+
+
+    }
+
+    public void filterByAscending(){
+
+    }
 
 
     public void showCarsByEngineType() {
@@ -334,8 +397,7 @@ public class Shop {
             } else {
                 System.out.println("Ok, we will look for another one!");
             }
-        }
-        else {
+        } else {
             System.out.println("We do not have this car!");
         }
     }

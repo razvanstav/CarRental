@@ -125,6 +125,8 @@ public abstract class Car {
     public int hashCode() {
         return Objects.hash(make, model, year, carType, doorNumber, color, costCategory, transmissionType, engine, basePrice, isRented);
     }
+
+
 }
 
 
