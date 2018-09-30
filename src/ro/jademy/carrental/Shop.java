@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Shop {
     // Q: what fields and methods should this class contain?
@@ -226,19 +227,22 @@ public class Shop {
         Scanner scan = new Scanner(System.in);
         String filter = scan.nextLine();
         ArrayList<Car> filteredCars = new ArrayList<>();
+        ArrayList<String> makerOptions = new ArrayList<>();
         for (Car car : carsList) {
             if (car.getMake().equalsIgnoreCase(filter)) {
                 filteredCars.add(car);
+            } else {
+                makerOptions.add(car.getMake());
             }
         }
         if (filteredCars.isEmpty()) {
-            System.out.println("There is no car with such options");
+            System.out.println("We do not have that maker");
+            System.out.println("We only have these makers : " + makerOptions.stream().distinct().collect(Collectors.toList()));
         } else {
             showTable();
             for (Car car : filteredCars) {
                 car.prettyCarList();
                 System.out.println();
-
             }
         }
     }
@@ -248,13 +252,19 @@ public class Shop {
         Scanner scan = new Scanner(System.in);
         String filter = scan.nextLine();
         ArrayList<Car> filteredCars = new ArrayList<>();
+        ArrayList<String> modelOptions = new ArrayList<>();
         for (Car car : carsList) {
             if (car.getModel().equalsIgnoreCase(filter)) {
                 filteredCars.add(car);
+            } else {
+                modelOptions.add(car.getModel());
             }
+
         }
+
         if (filteredCars.isEmpty()) {
-            System.out.println("There is no car with such options");
+            System.out.println("We do not have that model");
+            System.out.println("We only have these models : " + modelOptions.stream().distinct().collect(Collectors.toList()));
         } else {
             showTable();
             for (Car car : filteredCars) {
@@ -274,9 +284,7 @@ public class Shop {
                 filteredCars.add(car);
             }
         }
-        if (filteredCars.isEmpty()) {
-            System.out.println("There is no car with such options");
-        } else {
+
             showTable();
             for (Car car : filteredCars) {
                 car.prettyCarList();
@@ -284,7 +292,7 @@ public class Shop {
             }
         }
 
-    }
+
 
     public void showCarsByEngineType() {
         System.out.println("Enter engine type: ");
@@ -292,15 +300,20 @@ public class Shop {
         Scanner scan = new Scanner(System.in);
         String filter = scan.nextLine();
         List<Car> filteredCars = new ArrayList<>();
+        ArrayList<String> engineOptions = new ArrayList<>();
         for (Car car : carsList) {
             if (car.getEngine().getType().equalsIgnoreCase(filter)) {
                 filteredCars.add(car);
+            } else {
+                engineOptions.add(car.getEngine().getType());
+
             }
         }
 
         if (filteredCars.isEmpty()) {
             System.out.println("There is no car with such options");
-            // TODO adaugare variante alternative
+            System.out.println("We only have these engine types : " + engineOptions.stream().distinct().collect(Collectors.toList()));
+
         } else {
             showTable();
             for (Car car : filteredCars) {
@@ -321,8 +334,8 @@ public class Shop {
             } else {
                 System.out.println("Ok, we will look for another one!");
             }
-
-        } else {
+        }
+        else {
             System.out.println("We do not have this car!");
         }
     }
