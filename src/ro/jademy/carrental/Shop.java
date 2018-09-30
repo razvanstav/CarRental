@@ -35,17 +35,17 @@ public class Shop {
                 // System.out.println(carP[i]);
                 switch (carP[0]) {
                     case "BMW": {
-                        Car car = new BMW(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]), carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), carP[9], carP[10]);
+                        Car car = new BMW(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]), carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), Integer.parseInt(carP[9]), carP[10]);
                         carsList.add(car);
                         break;
                     }
                     case "Bentley": {
-                        Car car = new Bentley(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]), carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), carP[9], carP[10]);
+                        Car car = new Bentley(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]), carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), Integer.parseInt(carP[9]), carP[10]);
                         carsList.add(car);
                         break;
                     }
-                    case "DaciaLogan": {
-                        Car car = new DaciaLogan(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]), carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), carP[9], carP[10]);
+                    case "Dacia": {
+                        Car car = new Dacia(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]), carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), Integer.parseInt(carP[9]), carP[10]);
                         carsList.add(car);
                         break;
                     }
@@ -122,6 +122,7 @@ public class Shop {
                     break;
                 }
                 case 6: {
+                    System.out.println("Enter your choice by maker : ");
                     Scanner option1 = new Scanner(System.in);
                     rentACar(option1.nextLine());
                     break;
@@ -137,6 +138,7 @@ public class Shop {
             }
         }
     }
+
 
     public void showListMenuOptions() {
 
@@ -182,33 +184,45 @@ public class Shop {
         //       weekdays and national holidays in which the discount should be smaller
 
         // Q: what should be the return type of this method?
+        return 0;
     }
 
     public void listAllCars() {
+        showTable();
         for (Car car : carsList) {
-            System.out.println(car.toString());
+            car.prettyCarList();
+            System.out.println();
+
         }
     }
 
     public void listAvailableCars() {
+        showTable();
+
         for (Car car : carsList) {
             if (!car.getIsRented()) {
-                System.out.println(car.toString());
+                car.prettyCarList();
+                System.out.println();
+
             }
 
         }
     }
 
     public void listRentedCars() {
+        showTable();
+
         for (Car car : carsList) {
             if (car.getIsRented()) {
-                System.out.println(car.toString());
+                car.prettyCarList();
+                System.out.println();
+
             }
         }
     }
 
     public void showCarsByMakerFilter() {
-        System.out.println("Introduceti producatorul dorit: ");
+        System.out.println("Enter desired maker: ");
         Scanner scan = new Scanner(System.in);
         String filter = scan.nextLine();
         ArrayList<Car> filteredCars = new ArrayList<>();
@@ -218,17 +232,19 @@ public class Shop {
             }
         }
         if (filteredCars.isEmpty()) {
-            System.out.println("Nicio masina gasita dupa criteriile cautate. ");
+            System.out.println("There is no car with such options");
         } else {
+            showTable();
             for (Car car : filteredCars) {
-                System.out.println(car.toString());
+                car.prettyCarList();
+                System.out.println();
+
             }
         }
-        showMenu();
     }
 
     public void showCarsByModelFilter() {
-        System.out.println("Introduceti modelul dorit: ");
+        System.out.println("Enter desired model");
         Scanner scan = new Scanner(System.in);
         String filter = scan.nextLine();
         ArrayList<Car> filteredCars = new ArrayList<>();
@@ -238,13 +254,14 @@ public class Shop {
             }
         }
         if (filteredCars.isEmpty()) {
-            System.out.println("Nicio masina gasita dupa criteriile cautate. ");
+            System.out.println("There is no car with such options");
         } else {
+            showTable();
             for (Car car : filteredCars) {
-                System.out.println(car.toString());
+                car.prettyCarList();
+                System.out.println();
             }
         }
-        showMenu();
     }
 
     public void showCarsByPriceFilter() {
@@ -253,22 +270,24 @@ public class Shop {
         int filter = scan.nextInt();
         ArrayList<Car> filteredCars = new ArrayList<>();
         for (Car car : carsList) {
-            if (Integer.parseInt(car.getBasePrice()) < filter) {
+            if (car.getBasePrice() < filter) {
                 filteredCars.add(car);
             }
         }
         if (filteredCars.isEmpty()) {
-            System.out.println("Nicio masina gasita dupa criteriile cautate.");
+            System.out.println("There is no car with such options");
         } else {
+            showTable();
             for (Car car : filteredCars) {
-                System.out.println(car.toString());
+                car.prettyCarList();
+                System.out.println();
             }
         }
-        showMenu();
+
     }
 
     public void showCarsByEngineType() {
-        System.out.println("Introduceti tipul de motor: ");
+        System.out.println("Enter engine type: ");
 
         Scanner scan = new Scanner(System.in);
         String filter = scan.nextLine();
@@ -280,14 +299,15 @@ public class Shop {
         }
 
         if (filteredCars.isEmpty()) {
-            System.out.println("Nicio masina gasita dupa criteriile cautate.");
+            System.out.println("There is no car with such options");
             // TODO adaugare variante alternative
         } else {
+            showTable();
             for (Car car : filteredCars) {
-                System.out.println(car.toString());
+                car.prettyCarList();
+                System.out.println();
             }
         }
-        showMenu();
     }
 
     public void rentACar(String nameOfTheCar) {
@@ -298,20 +318,30 @@ public class Shop {
             String answer = scan.nextLine();
             if (answer.equalsIgnoreCase("yes")) {
                 carsList.get(index).setRented(true);
+            } else {
+                System.out.println("Ok, we will look for another one!");
             }
 
         } else {
-            System.out.println("We do not have this care!");
+            System.out.println("We do not have this car!");
         }
     }
 
 
     public int availableCar(String nameOfTheCar) {
         for (int i = 0; i < carsList.size(); i++) {
-            if (carsList.get(i).getMake().equalsIgnoreCase(nameOfTheCar)) {
+            if (carsList.get(i).getMake().toLowerCase().contains(nameOfTheCar.toLowerCase()) && !nameOfTheCar.isEmpty()) {
                 return i;
             }
         }
         return -1;
+    }
+
+    public void showTable() {
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%15s %15s %15s %15s %10s %10s %15s %15s %15s %15s %8s %15s",
+                "MAKER", "MODEL", "YEAR", "CAR TYPE", "DOORS", "COLOR", "CATEGORY", "TRANSMISSION", "ENGINE CAPACITY", "ENGINE TYPE", "PRICE", "AVAILABILITY");
+        System.out.println();
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 }

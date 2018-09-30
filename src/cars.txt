@@ -1,6 +1,9 @@
-BMW,Seria5,2010,Sedan,5,Verde,Manuala,4000,Benzina,75,Premium
+BMW,Seria5,2010,Sedan,5,Verde,Automata,4000,Benzina,75,Premium
+BMW,Seria3,2007,Sedan,5,Maro,Manuala,2000,Diesel,15,Economy
 Bentley,ContinentalGT,2018,Coupe,2,Maro,Automata,6300,Benzina,250,Luxury
-DaciaLogan,Solenza,2004,Rabla,5,Albastra,Manuala,1200,Benzina,12,Economy
+Bentley,ContinentalGT,2016,Coupe,2,Albastra,Automata,6300,Benzina,230,Luxury
+Dacia,Solenza,2004,Sedan,5,Albastra,Manuala,1200,Benzina,12,Economy
+Dacia,Duster,2018,SUV,5,Albastra,Automata,2400,Benzina,64,Premium
 
 
 

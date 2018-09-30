@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public abstract class Car {
 
-        public Car(String make, String model, Integer year, String carType, Integer doorNumber, String color, String transmissionType, Engine engine, String basePrice,String costCategory) {
+        public Car(String make, String model, Integer year, String carType, Integer doorNumber, String color, String transmissionType, Engine engine, Integer basePrice,String costCategory) {
             this.make = make;
             this.model = model;
             this.year = year;
@@ -25,7 +25,8 @@ public abstract class Car {
 
     @Override
     public String toString() {
-        return "Car{" +
+        return
+                "Car{" +
                 "make='" + make + '\'' +
                 ", model='" + model + '\'' +
                 ", year=" + year +
@@ -34,11 +35,17 @@ public abstract class Car {
                 ", color='" + color + '\'' +
                 ", costCategory='" + costCategory + '\'' +
                 ", transmissionType='" + transmissionType + '\'' +
-                ", engine=" + engine +
+                ", engine=" + engine.getType()+engine.getCapacity() +
                 ", basePrice='" + basePrice + '\'' +
                 ", isRented=" + isRented +
                 '}';
     }
+    public void prettyCarList(){
+
+        System.out.format("%15s %15s %15d %15s %10d %10s %15s %15s %15d %15s %8d %15s",make,model,year,carType,doorNumber,color,costCategory,transmissionType,engine.getCapacity(),engine.getType(),basePrice,isRented);
+
+    }
+
 
     // Q: how can we better represent the car make?
     private String make;
@@ -60,7 +67,7 @@ public abstract class Car {
     private Engine engine;
 
     // Q: how can we better represent money value?
-    private String basePrice;
+    private Integer basePrice;
     private boolean isRented;
 
     public boolean getIsRented(){
@@ -80,7 +87,7 @@ public abstract class Car {
         isRented = rented;
     }
 
-    public String getBasePrice() {
+    public Integer getBasePrice() {
         return basePrice;
     }
 
