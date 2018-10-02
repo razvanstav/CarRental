@@ -368,7 +368,9 @@ public class Shop {
             printAvailableCarsByMake(nameOfTheCar);
             int answer = scan.nextInt();
             cars.get(answer-1).setRented(true);
-            }
+            System.out.println("You successfully rented our " + cars.get(answer-1).getMake() + " with the price of " + cars.get(answer-1).getBasePrice() +" dollars per day.");
+
+        }
         }
 
 
