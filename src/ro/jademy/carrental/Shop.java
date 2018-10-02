@@ -12,11 +12,10 @@ import java.util.stream.Collectors;
 public class Shop {
     // Q: what fields and methods should this class contain?
 
-    private Scanner scan = new Scanner(System.in);
-    private File file = new File("passwords.txt");
     private Scanner fileScan;
     private ArrayList<Salesman> salesmenList = new ArrayList<>();
     private ArrayList<Car> carsList = new ArrayList<>();
+
 
     public Shop() {
 
@@ -36,17 +35,20 @@ public class Shop {
                 // System.out.println(carP[i]);
                 switch (carP[0]) {
                     case "BMW": {
-                        Car car = new BMW(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]), carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), Integer.parseInt(carP[9]), carP[10]);
+                        Car car = new BMW(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]),
+                                carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), Integer.parseInt(carP[9]), carP[10]);
                         carsList.add(car);
                         break;
                     }
                     case "Bentley": {
-                        Car car = new Bentley(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]), carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), Integer.parseInt(carP[9]), carP[10]);
+                        Car car = new Bentley(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]),
+                                carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), Integer.parseInt(carP[9]), carP[10]);
                         carsList.add(car);
                         break;
                     }
                     case "Dacia": {
-                        Car car = new Dacia(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]), carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), Integer.parseInt(carP[9]), carP[10]);
+                        Car car = new Dacia(carP[0], carP[1], Integer.parseInt(carP[2]), carP[3], Integer.parseInt(carP[4]),
+                                carP[5], carP[6], new Engine(Integer.parseInt(carP[7]), carP[8]), Integer.parseInt(carP[9]), carP[10]);
                         carsList.add(car);
                         break;
                     }
@@ -56,7 +58,6 @@ public class Shop {
             System.out.println(e.getMessage());
         }
     }
-
 
     public boolean login(String username, String password) {
 
@@ -80,7 +81,6 @@ public class Shop {
         return false;
     }
 
-
     public void showMenu() {
         boolean ok = true;
 
@@ -96,8 +96,9 @@ public class Shop {
             System.out.println("4. Check income");
             System.out.println("5. Options");
             System.out.println("6. Rent a car");
-            System.out.println("7. Logout ");
-            System.out.println("8. Exit");
+            System.out.println("7. Request a callback");
+            System.out.println("8. Logout");
+            System.out.println("9. Exit");
 
             Scanner scan = new Scanner(System.in);
             int option = scan.nextInt();
@@ -129,10 +130,14 @@ public class Shop {
                     break;
                 }
                 case 7: {
-                    // logout();
+                    System.out.println("These are our rented cars");
+                    returnACar();
                     break;
                 }
                 case 8: {
+                    //logout
+                }
+                case 9: {
                     ok = false;
                     break;
                 }
@@ -140,14 +145,13 @@ public class Shop {
         }
     }
 
-
     public void showListMenuOptions() {
 
         System.out.println("Select an action from below:");
         System.out.println("1. Filter by make");
         System.out.println("2. Filter by model");
         System.out.println("3. Filter by price");
-        System.out.println("4. Filter by engineType");
+        System.out.println("4. Filter by engine type");
         System.out.println("5. Return to menu");
         // TODO: add additional filter methods based on car specs
         Scanner scan = new Scanner(System.in);
@@ -226,7 +230,7 @@ public class Shop {
     public void listAllCars() {
         showTable();
         for (Car car : carsList) {
-            car.prettyCarList();
+            car.printCar();
             System.out.println();
 
         }
@@ -237,11 +241,10 @@ public class Shop {
 
         for (Car car : carsList) {
             if (!car.getIsRented()) {
-                car.prettyCarList();
+                car.printCar();
                 System.out.println();
 
             }
-
         }
     }
 
@@ -250,7 +253,7 @@ public class Shop {
 
         for (Car car : carsList) {
             if (car.getIsRented()) {
-                car.prettyCarList();
+                car.printCar();
                 System.out.println();
 
             }
@@ -261,24 +264,15 @@ public class Shop {
         System.out.println("Enter desired maker: ");
         Scanner scan = new Scanner(System.in);
         String filter = scan.nextLine();
-        ArrayList<Car> filteredCars = new ArrayList<>();
         ArrayList<String> makerOptions = new ArrayList<>();
-        for (Car car : carsList) {
-            if (car.getMake().equalsIgnoreCase(filter)) {
-                filteredCars.add(car);
-            } else {
+        List<Car> filteredCars = getFilterCarsByMake(filter);
+        if (filteredCars.isEmpty()) {
+            for (Car car: carsList) {
                 makerOptions.add(car.getMake());
             }
-        }
-        if (filteredCars.isEmpty()) {
-            System.out.println("We do not have that maker");
-            System.out.println("We only have these makers : " + makerOptions.stream().distinct().collect(Collectors.toList()));
+            showOtherOptions(makerOptions);
         } else {
-            showTable();
-            for (Car car : filteredCars) {
-                car.prettyCarList();
-                System.out.println();
-            }
+            printFilterCarsByMake(filter);
         }
     }
 
@@ -286,26 +280,16 @@ public class Shop {
         System.out.println("Enter desired model");
         Scanner scan = new Scanner(System.in);
         String filter = scan.nextLine();
-        ArrayList<Car> filteredCars = new ArrayList<>();
+        List<Car> filteredCars = getFilterCarsByModel(filter);
         ArrayList<String> modelOptions = new ArrayList<>();
-        for (Car car : carsList) {
-            if (car.getModel().equalsIgnoreCase(filter)) {
-                filteredCars.add(car);
-            } else {
+        if (filteredCars.isEmpty()) {
+            for (Car car: filteredCars) {
                 modelOptions.add(car.getModel());
             }
-
-        }
-
-        if (filteredCars.isEmpty()) {
-            System.out.println("We do not have that model");
-            System.out.println("We only have these models : " + modelOptions.stream().distinct().collect(Collectors.toList()));
+            showOtherOptions(modelOptions);
         } else {
             showTable();
-            for (Car car : filteredCars) {
-                car.prettyCarList();
-                System.out.println();
-            }
+            printFilterCarsByModel(filter);
         }
     }
 
@@ -322,10 +306,11 @@ public class Shop {
 
         showTable();
         for (Car car : filteredCars) {
-            car.prettyCarList();
+            car.printCar();
             System.out.println();
         }
     }
+
     public void showCarsOverPrice() {
         System.out.println("Enter minimum amount: ");
         Scanner scan = new Scanner(System.in);
@@ -339,84 +324,165 @@ public class Shop {
 
         showTable();
         for (Car car : filteredCars) {
-            car.prettyCarList();
+            car.printCar();
+            System.out.println();
+        }
+    }
+
+    public void filterByDescending() {
+
+    }
+
+    public void filterByAscending() {
+
+    }
+
+    public void showCarsByEngineType() {
+        System.out.println("Enter engine type: ");
+        Scanner scan = new Scanner(System.in);
+        String filter = scan.nextLine();
+        List<Car> filteredCars = getFilterCarsByEngine(filter);
+        ArrayList<String> engineOptions = new ArrayList<>();
+        if (filteredCars.isEmpty()) {
+            for (Car car: carsList) {
+                engineOptions.add(car.getEngine().getType());
+            }
+            showOtherOptions(engineOptions);
+        } else {
+            showTable();
+            printFilterCarsByEngine(filter);
+        }
+    }
+
+    public void rentACar(String nameOfTheCar) {
+        List<Car> cars = getAvailableCarsByMake(nameOfTheCar);
+        Scanner scan = new Scanner(System.in);
+        if (cars.isEmpty()) {
+            System.out.println("We do not have this car!");
+        } else if (cars.size()==1) {
+            System.out.println("Thank you for you purchase");
+            System.out.println("You successfully rented our " + cars.get(0).getMake() + " with the price of " + cars.get(0).getBasePrice() +" dollars per day.");
+                cars.get(0).setRented(true);
+            } else {
+            System.out.println("Which car do you want to rent?");
+            printAvailableCarsByMake(nameOfTheCar);
+            int answer = scan.nextInt();
+            cars.get(answer-1).setRented(true);
+            }
+        }
+
+
+    public void returnACar() {
+        List<Car> cars = getRentedCars();
+        Scanner scan = new Scanner(System.in);
+        if (cars.isEmpty()){
+            System.out.println("We haven't rented any cars yet!");
+        } else if (cars.size()==1){
+            System.out.println("You successfully called back " + cars.get(0).getMake());
+            cars.get(0).setRented(false);
+        } else {
+            System.out.println("Which care do you want to callback?");
+            printRentedCars();
+            int answer = scan.nextInt();
+            cars.get(answer).setRented(false);
+        }
+    }
+    public List<Car> getRentedCars(){
+        ArrayList<Car> rentedCars = new ArrayList<>();
+        for (Car car: carsList ){
+            if(car.getIsRented()){
+                rentedCars.add(car);
+            }
+        }
+        return rentedCars;
+    }
+    public void printRentedCars(){
+        showTable();
+        for (Car car : getRentedCars()) {
+            car.printCar();
             System.out.println();
         }
     }
 
 
 
-    public void filterByDescending(){
-
-
-
-    }
-
-    public void filterByAscending(){
-
-    }
-
-
-    public void showCarsByEngineType() {
-        System.out.println("Enter engine type: ");
-
-        Scanner scan = new Scanner(System.in);
-        String filter = scan.nextLine();
-        List<Car> filteredCars = new ArrayList<>();
-        ArrayList<String> engineOptions = new ArrayList<>();
+    public List<Car> getAvailableCarsByMake(String carMake) {
+        ArrayList<Car> filteredCars = new ArrayList<>();
         for (Car car : carsList) {
-            if (car.getEngine().getType().equalsIgnoreCase(filter)) {
+            if (car.getMake().toLowerCase().contains(carMake.toLowerCase()) && !car.getIsRented() && !carMake.isEmpty()) {
                 filteredCars.add(car);
-            } else {
-                engineOptions.add(car.getEngine().getType());
-
             }
         }
-
-        if (filteredCars.isEmpty()) {
-            System.out.println("There is no car with such options");
-            System.out.println("We only have these engine types : " + engineOptions.stream().distinct().collect(Collectors.toList()));
-
-        } else {
-            showTable();
-            for (Car car : filteredCars) {
-                car.prettyCarList();
-                System.out.println();
-            }
+        return filteredCars;
+    }
+    public void printAvailableCarsByMake(String carMake){
+        showTable();
+        for (Car car: getAvailableCarsByMake(carMake)) {
+            car.printCar();
+            System.out.println();
         }
     }
 
-    public void rentACar(String nameOfTheCar) {
-        int index = availableCar(nameOfTheCar);
-        if (index != -1) {
-            System.out.println("Are you sure you want to rent this car?");
-            Scanner scan = new Scanner(System.in);
-            String answer = scan.nextLine();
-            if (answer.equalsIgnoreCase("yes")) {
-                carsList.get(index).setRented(true);
-            } else {
-                System.out.println("Ok, we will look for another one!");
+    public List<Car> getFilterCarsByMake(String carMake) {
+        ArrayList<Car> filteredCars = new ArrayList<>();
+        for (Car car : carsList) {
+            if (car.getMake().equalsIgnoreCase(carMake)) {
+                filteredCars.add(car);
             }
-        } else {
-            System.out.println("We do not have this car!");
+        }
+        return filteredCars;
+    }
+    public void printFilterCarsByMake(String carMake){
+        showTable();
+        for (Car car: getFilterCarsByMake(carMake)) {
+            car.printCar();
+            System.out.println();
         }
     }
 
-
-    public int availableCar(String nameOfTheCar) {
-        for (int i = 0; i < carsList.size(); i++) {
-            if (carsList.get(i).getMake().toLowerCase().contains(nameOfTheCar.toLowerCase()) && !nameOfTheCar.isEmpty()) {
-                return i;
+    public List<Car> getFilterCarsByModel(String carModel) {
+        ArrayList<Car> filteredCars = new ArrayList<>();
+        for (Car car : carsList) {
+            if (car.getMake().equalsIgnoreCase(carModel)) {
+                filteredCars.add(car);
             }
         }
-        return -1;
+        return filteredCars;
+    }
+    public void printFilterCarsByModel(String carModel){
+        showTable();
+        for (Car car: getAvailableCarsByMake(carModel)) {
+            car.printCar();
+            System.out.println();
+        }
+    }
+
+    public List<Car> getFilterCarsByEngine(String carEngine) {
+        ArrayList<Car> filteredCars = new ArrayList<>();
+        for (Car car : carsList) {
+            if (car.getMake().equalsIgnoreCase(carEngine)) {
+                filteredCars.add(car);
+            }
+        }
+        return filteredCars;
+    }
+    public void printFilterCarsByEngine(String carEngine){
+        showTable();
+        for (Car car: getAvailableCarsByMake(carEngine)) {
+            car.printCar();
+            System.out.println();
+        }
     }
 
     public void showTable() {
-        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         System.out.printf("%15s %15s %15s %15s %10s %10s %15s %15s %15s %15s %8s %15s",
                 "MAKER", "MODEL", "YEAR", "CAR TYPE", "DOORS", "COLOR", "CATEGORY", "TRANSMISSION", "ENGINE CAPACITY", "ENGINE TYPE", "PRICE", "AVAILABILITY");
         System.out.println();
-        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+    public void showOtherOptions(ArrayList<String> options) {
+        System.out.println("We do not have that options");
+        System.out.println("We only have these options : " + options.stream().distinct().collect(Collectors.toList()));
     }
 }

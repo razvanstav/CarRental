@@ -40,7 +40,7 @@ public abstract class Car {
                 ", isRented=" + isRented +
                 '}';
     }
-    public void prettyCarList(){
+    public void printCar(){
 
         System.out.format("%15s %15s %15d %15s %10d %10s %15s %15s %15d %15s %8d %15s",make,model,year,carType,doorNumber,color,costCategory,transmissionType,engine.getCapacity(),engine.getType(),basePrice,isRented);
 
@@ -51,22 +51,12 @@ public abstract class Car {
     private String make;
     private String model;
     private Integer year;
-
-    // Q: how can we better represent the car type?
     private String carType; //
-
     private Integer doorNumber;
-
     private String color;
     private String costCategory;
-
-    // Q: how can we better represent the transmission type?
-    private String transmissionType; // automatic, manual
-
-    // Q: how can we better represent the engine?
+    private String transmissionType;
     private Engine engine;
-
-    // Q: how can we better represent money value?
     private Integer basePrice;
     private boolean isRented;
 
