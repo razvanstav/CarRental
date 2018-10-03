@@ -1,53 +1,16 @@
 package ro.jademy.carsMakers;
 
 
+import ro.jademy.carrental.CarState;
+import ro.jademy.carrental.Customer;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Objects;
+import java.util.Scanner;
 
 public abstract class Car {
 
-        public Car(String make, String model, Integer year, String carType, Integer doorNumber, String color, String transmissionType, Engine engine, Integer basePrice,String costCategory) {
-            this.make = make;
-            this.model = model;
-            this.year = year;
-            this.carType = carType;
-            this.doorNumber = doorNumber;
-            this.color = color;
-            this.transmissionType = transmissionType;
-            this.engine = engine;
-            this.basePrice = basePrice;
-            this.costCategory = costCategory;
-            this.isRented = false;
-        }
-
-        public Car() {
-        }
-
-
-    @Override
-    public String toString() {
-        return
-                "Car{" +
-                "make='" + make + '\'' +
-                ", model='" + model + '\'' +
-                ", year=" + year +
-                ", carType='" + carType + '\'' +
-                ", doorNumber=" + doorNumber +
-                ", color='" + color + '\'' +
-                ", costCategory='" + costCategory + '\'' +
-                ", transmissionType='" + transmissionType + '\'' +
-                ", engine=" + engine.getType()+engine.getCapacity() +
-                ", basePrice='" + basePrice + '\'' +
-                ", isRented=" + isRented +
-                '}';
-    }
-    public void printCar(){
-
-        System.out.format("%15s %15s %15d %15s %10d %10s %15s %15s %15d %15s %8d %15s",make,model,year,carType,doorNumber,color,costCategory,transmissionType,engine.getCapacity(),engine.getType(),basePrice,isRented);
-
-    }
-
-
-    // Q: how can we better represent the car make?
     private String make;
     private String model;
     private Integer year;
@@ -58,27 +21,36 @@ public abstract class Car {
     private String transmissionType;
     private Engine engine;
     private Integer basePrice;
-    private boolean isRented;
+    private CarState state = new CarState();
+    private ArrayList<Customer> customersList = new ArrayList<>();
 
-    public boolean getIsRented(){
-        return this.isRented;
+
+    public Car(String make, String model, Integer year, String carType, Integer doorNumber, String color, String transmissionType, Engine engine, Integer basePrice, String costCategory) {
+        this.make = make;
+        this.model = model;
+        this.year = year;
+        this.carType = carType;
+        this.doorNumber = doorNumber;
+        this.color = color;
+        this.transmissionType = transmissionType;
+        this.engine = engine;
+        this.basePrice = basePrice;
+        this.costCategory = costCategory;
     }
-    // Q: do we need a constructor other than the default one?
-    // Q: how can we better protect the car data?
+    public Car(){
+
+    }
+    public CarState getState() {
+        return state;
+    }
+
+    public CarState setState() {
+        this.state = state;
+        return state;
+    }
+
     public Engine getEngine() {
-            return engine;
-        }
-
-
-
-
-
-        public Integer getDoorNumber() {
-            return doorNumber;
-        }
-
-    public void setRented(boolean rented) {
-        isRented = rented;
+        return engine;
     }
 
     public Integer getBasePrice() {
@@ -96,10 +68,9 @@ public abstract class Car {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Car)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Car car = (Car) o;
-        return isRented == car.isRented &&
-                Objects.equals(make, car.make) &&
+        return Objects.equals(make, car.make) &&
                 Objects.equals(model, car.model) &&
                 Objects.equals(year, car.year) &&
                 Objects.equals(carType, car.carType) &&
@@ -108,15 +79,57 @@ public abstract class Car {
                 Objects.equals(costCategory, car.costCategory) &&
                 Objects.equals(transmissionType, car.transmissionType) &&
                 Objects.equals(engine, car.engine) &&
-                Objects.equals(basePrice, car.basePrice);
+                Objects.equals(basePrice, car.basePrice) &&
+                Objects.equals(state, car.state);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(make, model, year, carType, doorNumber, color, costCategory, transmissionType, engine, basePrice, isRented);
+        return Objects.hash(make, model, year, carType, doorNumber, color, costCategory, transmissionType, engine, basePrice, state);
     }
 
+    @Override
+    public String toString() {
+        return
+                "Car{" +
+                        "make='" + make + '\'' +
+                        ", model='" + model + '\'' +
+                        ", year=" + year +
+                        ", carType='" + carType + '\'' +
+                        ", doorNumber=" + doorNumber +
+                        ", color='" + color + '\'' +
+                        ", costCategory='" + costCategory + '\'' +
+                        ", transmissionType='" + transmissionType + '\'' +
+                        ", engine=" + engine.getType() + engine.getCapacity() +
+                        ", basePrice='" + basePrice + '\'' +
+                        ", isRented=" + state.isRented() + state.getRentedFrom() + state.getRentedUntil() +
+                        '}';
+    }
 
+    public void printCar() {
+        System.out.format("%15s %15s %15d %15s %10d %10s %15s %15s %15d %15s %8d %15s", make, model, year, carType, doorNumber, color, costCategory, transmissionType, engine.getCapacity(), engine.getType(), basePrice, state.isRented());
+    }
+
+    public void rentCar(int numberOfDays) {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("When would you like to pick up the car?");
+        System.out.println("A month and a day please!");
+        int month = scan.nextInt();
+        int day = scan.nextInt();
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(2018,month-1,day);
+        Calendar endDate = startDate;
+        endDate.add(Calendar.DATE,numberOfDays);
+        rentCar(startDate,endDate);
+    }
+
+    public void rentCar(Calendar startDate, Calendar endDate) {
+        this.state.setRented(true);
+        this.state.setRentedFrom(startDate);
+        this.state.setRentedUntil(endDate);
+    }
+
+    public void returnCar() {
+
+    }
 }
-
-

@@ -1,12 +1,10 @@
 package ro.jademy.carrental;
 
 import ro.jademy.carsMakers.*;
-
+import java.util.Calendar;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Shop {
@@ -15,7 +13,6 @@ public class Shop {
     private Scanner fileScan;
     private ArrayList<Salesman> salesmenList = new ArrayList<>();
     private ArrayList<Car> carsList = new ArrayList<>();
-
 
     public Shop() {
 
@@ -130,7 +127,6 @@ public class Shop {
                     break;
                 }
                 case 7: {
-                    System.out.println("These are our rented cars");
                     returnACar();
                     break;
                 }
@@ -240,7 +236,7 @@ public class Shop {
         showTable();
 
         for (Car car : carsList) {
-            if (!car.getIsRented()) {
+            if (!car.getState().isRented()) {
                 car.printCar();
                 System.out.println();
 
@@ -252,7 +248,7 @@ public class Shop {
         showTable();
 
         for (Car car : carsList) {
-            if (car.getIsRented()) {
+            if (car.getState().isRented()) {
                 car.printCar();
                 System.out.println();
 
@@ -330,7 +326,6 @@ public class Shop {
     }
 
     public void filterByDescending() {
-
     }
 
     public void filterByAscending() {
@@ -360,15 +355,22 @@ public class Shop {
         if (cars.isEmpty()) {
             System.out.println("We do not have this car!");
         } else if (cars.size()==1) {
+            System.out.println("How many days would you like to rent the car?");
+            int numberOfDays = scan.nextInt();
+            cars.get(0).rentCar(numberOfDays);
             System.out.println("Thank you for you purchase");
-            System.out.println("You successfully rented our " + cars.get(0).getMake() + " with the price of " + cars.get(0).getBasePrice() +" dollars per day.");
-                cars.get(0).setRented(true);
+            System.out.println("You successfully rented our " + cars.get(0).getMake() + " with the price of " + cars.get(0).getBasePrice() +" dollars per day until "+cars.get(0).getState().getRentedUntil().getTime() +".");
+                cars.get(0).getState().setRented(true);
             } else {
             System.out.println("Which car do you want to rent?");
             printAvailableCarsByMake(nameOfTheCar);
             int answer = scan.nextInt();
-            cars.get(answer-1).setRented(true);
-            System.out.println("You successfully rented our " + cars.get(answer-1).getMake() + " with the price of " + cars.get(answer-1).getBasePrice() +" dollars per day.");
+            System.out.println("How many days would you like to rent the car?");
+            int numberOfDays = scan.nextInt();
+            cars.get(answer-1).rentCar(numberOfDays);
+            System.out.println("Thank you for you purchase");
+            cars.get(answer-1).getState().setRented(true);
+            System.out.println("You successfully rented our " + cars.get(answer-1).getMake() + " with the price of " + cars.get(answer-1).getBasePrice() +" dollars per day until "+cars.get(answer-1).getState().getRentedUntil().getTime() +".");
 
         }
         }
@@ -381,18 +383,21 @@ public class Shop {
             System.out.println("We haven't rented any cars yet!");
         } else if (cars.size()==1){
             System.out.println("You successfully called back " + cars.get(0).getMake());
-            cars.get(0).setRented(false);
+            cars.get(0).returnCar();
         } else {
+            System.out.println("These are our rented cars!");
             System.out.println("Which care do you want to callback?");
             printRentedCars();
             int answer = scan.nextInt();
-            cars.get(answer).setRented(false);
+            cars.get(answer-1).returnCar();
+            System.out.println("You successfully called back " + cars.get(0).getMake());
+
         }
     }
     public List<Car> getRentedCars(){
         ArrayList<Car> rentedCars = new ArrayList<>();
         for (Car car: carsList ){
-            if(car.getIsRented()){
+            if(car.getState().isRented()){
                 rentedCars.add(car);
             }
         }
@@ -411,7 +416,7 @@ public class Shop {
     public List<Car> getAvailableCarsByMake(String carMake) {
         ArrayList<Car> filteredCars = new ArrayList<>();
         for (Car car : carsList) {
-            if (car.getMake().toLowerCase().contains(carMake.toLowerCase()) && !car.getIsRented() && !carMake.isEmpty()) {
+            if (car.getMake().toLowerCase().contains(carMake.toLowerCase()) && !car.getState().isRented() && !carMake.isEmpty()) {
                 filteredCars.add(car);
             }
         }
