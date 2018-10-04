@@ -499,7 +499,7 @@ public class Shop {
     public void showTable() {
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         System.out.printf("%15s %15s %15s %15s %10s %10s %15s %15s %15s %15s %8s %15s",
-                "MAKER", "MODEL", "YEAR", "CAR TYPE", "DOORS", "COLOR", "CATEGORY", "TRANSMISSION", "ENGINE CAPACITY", "ENGINE TYPE", "PRICE", "AVAILABILITY");
+                "MAKER", "MODEL", "YEAR", "CAR TYPE", "DOORS", "COLOR", "CATEGORY", "TRANSMISSION", "ENGINE CAPACITY", "ENGINE TYPE", "PRICE", "RENTED");
         System.out.println();
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
