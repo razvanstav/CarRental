@@ -1,5 +1,7 @@
 package ro.jademy.carsMakers;
 
+import ro.jademy.carrental.Customer;
+
 public class BMW extends Car {
 
 

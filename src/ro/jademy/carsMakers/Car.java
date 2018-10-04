@@ -4,10 +4,7 @@ package ro.jademy.carsMakers;
 import ro.jademy.carrental.CarState;
 import ro.jademy.carrental.Customer;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public abstract class Car {
 
@@ -22,7 +19,7 @@ public abstract class Car {
     private Engine engine;
     private Integer basePrice;
     private CarState state = new CarState();
-    private ArrayList<Customer> customersList = new ArrayList<>();
+    private List<Customer> customerList = new ArrayList<>();
 
 
     public Car(String make, String model, Integer year, String carType, Integer doorNumber, String color, String transmissionType, Engine engine, Integer basePrice, String costCategory) {
@@ -37,9 +34,11 @@ public abstract class Car {
         this.basePrice = basePrice;
         this.costCategory = costCategory;
     }
-    public Car(){
+
+    public Car() {
 
     }
+
     public CarState getState() {
         return state;
     }
@@ -117,10 +116,10 @@ public abstract class Car {
         int month = scan.nextInt();
         int day = scan.nextInt();
         Calendar startDate = Calendar.getInstance();
-        startDate.set(2018,month-1,day);
+        startDate.set(2018, month - 1, day);
         Calendar endDate = startDate;
-        endDate.add(Calendar.DATE,numberOfDays);
-        rentCar(startDate,endDate);
+        endDate.add(Calendar.DATE, numberOfDays);
+        rentCar(startDate, endDate);
     }
 
     public void rentCar(Calendar startDate, Calendar endDate) {
@@ -130,6 +129,28 @@ public abstract class Car {
     }
 
     public void returnCar() {
+        this.state.setRented(false);
+    }
 
+    public void createCustomer() {
+        Scanner answer = new Scanner(System.in);
+        System.out.println("Please enter your name: ");
+        String name = answer.nextLine();
+        System.out.println("Please enter you last name: ");
+        String name1 = answer.nextLine();
+        System.out.println("The available amount of money:");
+        int money = answer.nextInt();
+        setCustomer(name, name1, money);
+    }
+
+    public void setCustomer(String firstName, String lastName, int money) {
+       customerList.add(new Customer(firstName, lastName, money));
+    }
+
+    public boolean calculateMoney(int days) {
+        return (days * getBasePrice() <= customerList.get(0).getBalance());
+    }
+    public boolean calculateMoneyForCustomer (int days, int counter){
+        return (days * getBasePrice() <= customerList.get(counter).getBalance());
     }
 }

@@ -358,9 +358,17 @@ public class Shop {
             System.out.println("How many days would you like to rent the car?");
             int numberOfDays = scan.nextInt();
             cars.get(0).rentCar(numberOfDays);
+            System.out.println("Now we will need your personal data. Dont worry, we are GDPR compliant!");
+            cars.get(0).createCustomer();
+            if (cars.get(0).calculateMoney(numberOfDays)){
+                System.out.println("Sufficient funds!");
             System.out.println("Thank you for you purchase");
             System.out.println("You successfully rented our " + cars.get(0).getMake() + " with the price of " + cars.get(0).getBasePrice() +" dollars per day until "+cars.get(0).getState().getRentedUntil().getTime() +".");
-                cars.get(0).getState().setRented(true);
+                cars.get(0).getState().setRented(true);}
+                else {
+                System.out.println("Take a look at the other cars!");
+                    listAllCars();
+            }
             } else {
             System.out.println("Which car do you want to rent?");
             printAvailableCarsByMake(nameOfTheCar);
@@ -368,10 +376,17 @@ public class Shop {
             System.out.println("How many days would you like to rent the car?");
             int numberOfDays = scan.nextInt();
             cars.get(answer-1).rentCar(numberOfDays);
+            System.out.println("Now we will need your personal data. Dont worry, we are GDPR compliant!");
+            cars.get(answer-1).createCustomer();
+            if (cars.get(answer-1).calculateMoneyForCustomer(numberOfDays,answer-1)){
+                System.out.println("Sufficient funds!");
             System.out.println("Thank you for you purchase");
             cars.get(answer-1).getState().setRented(true);
             System.out.println("You successfully rented our " + cars.get(answer-1).getMake() + " with the price of " + cars.get(answer-1).getBasePrice() +" dollars per day until "+cars.get(answer-1).getState().getRentedUntil().getTime() +".");
 
+        } else {
+            listAllCars();
+            }
         }
         }
 
@@ -382,7 +397,7 @@ public class Shop {
         if (cars.isEmpty()){
             System.out.println("We haven't rented any cars yet!");
         } else if (cars.size()==1){
-            System.out.println("You successfully called back " + cars.get(0).getMake());
+            System.out.println("You successfully called back our " + cars.get(0).getMake()+".");
             cars.get(0).returnCar();
         } else {
             System.out.println("These are our rented cars!");
@@ -390,7 +405,7 @@ public class Shop {
             printRentedCars();
             int answer = scan.nextInt();
             cars.get(answer-1).returnCar();
-            System.out.println("You successfully called back " + cars.get(0).getMake());
+            System.out.println("You successfully called back our " + cars.get(0).getMake()+".");
 
         }
     }
@@ -492,4 +507,5 @@ public class Shop {
         System.out.println("We do not have that options");
         System.out.println("We only have these options : " + options.stream().distinct().collect(Collectors.toList()));
     }
+
 }
