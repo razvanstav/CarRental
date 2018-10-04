@@ -1,7 +1,7 @@
 package ro.jademy.carrental;
 
 import ro.jademy.carsMakers.*;
-import java.util.Calendar;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -378,7 +378,7 @@ public class Shop {
             cars.get(answer-1).rentCar(numberOfDays);
             System.out.println("Now we will need your personal data. Dont worry, we are GDPR compliant!");
             cars.get(answer-1).createCustomer();
-            if (cars.get(answer-1).calculateMoneyForCustomer(numberOfDays,answer-1)){
+            if (cars.get(answer-1).calculateMoneyWithAList(numberOfDays,answer-1)){
                 System.out.println("Sufficient funds!");
             System.out.println("Thank you for you purchase");
             cars.get(answer-1).getState().setRented(true);

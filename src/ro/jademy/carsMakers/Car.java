@@ -150,7 +150,7 @@ public abstract class Car {
     public boolean calculateMoney(int days) {
         return (days * getBasePrice() <= customerList.get(0).getBalance());
     }
-    public boolean calculateMoneyForCustomer (int days, int counter){
+    public boolean calculateMoneyWithAList(int days, int counter){
         return (days * getBasePrice() <= customerList.get(counter).getBalance());
     }
 }
