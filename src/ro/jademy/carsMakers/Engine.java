@@ -2,9 +2,9 @@ package ro.jademy.carsMakers;
 
 import java.util.Objects;
 
-public class Engine {
+public class Engine implements Comparable<Engine>{
 
-       private int capacity;
+       private Integer capacity;
        private String type;
 
        public Engine(){
@@ -28,7 +28,7 @@ public class Engine {
               return type;
        }
 
-       public int getCapacity() {
+       public Integer getCapacity() {
               return capacity;
        }
 
@@ -43,5 +43,11 @@ public class Engine {
        @Override
        public int hashCode() {
               return Objects.hash(type);
+       }
+
+       @Override
+       public int compareTo(Engine o) {
+           int capacityCompare = capacity.compareTo(o.capacity);
+              return capacityCompare;
        }
 }

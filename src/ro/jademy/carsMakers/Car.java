@@ -6,8 +6,8 @@ import ro.jademy.carrental.Customer;
 
 import java.util.*;
 
-public abstract class Car {
-
+public abstract class Car implements Comparable<Car> {
+    //
     private String make;
     private String model;
     private Integer year;
@@ -152,5 +152,23 @@ public abstract class Car {
     }
     public boolean calculateMoneyWithAList(int days, int counter){
         return (days * getBasePrice() <= customerList.get(counter).getBalance());
+    }
+
+    @Override
+    public int compareTo(Car o) {
+        int makeCompare = make.compareTo(o.make);
+        if (makeCompare != 0){
+            return makeCompare;
+        }
+        int modelCompare = model.compareTo(o.model);
+        if (modelCompare != 0){
+            return modelCompare;
+        }
+        int engineCapacityCompare = engine.getCapacity().compareTo(o.getEngine().getCapacity());
+        if (engineCapacityCompare != 0){
+            return engineCapacityCompare;
+        }
+
+        return makeCompare;
     }
 }
