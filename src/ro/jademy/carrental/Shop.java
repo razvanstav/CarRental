@@ -263,7 +263,7 @@ public class Shop {
         ArrayList<String> makerOptions = new ArrayList<>();
         List<Car> filteredCars = getFilterCarsByMake(filter);
         if (filteredCars.isEmpty()) {
-            for (Car car: carsList) {
+            for (Car car : carsList) {
                 makerOptions.add(car.getMake());
             }
             showOtherOptions(makerOptions);
@@ -279,7 +279,7 @@ public class Shop {
         List<Car> filteredCars = getFilterCarsByModel(filter);
         ArrayList<String> modelOptions = new ArrayList<>();
         if (filteredCars.isEmpty()) {
-            for (Car car: filteredCars) {
+            for (Car car : carsList) {
                 modelOptions.add(car.getModel());
             }
             showOtherOptions(modelOptions);
@@ -293,12 +293,7 @@ public class Shop {
         System.out.println("Enter maximum amount: ");
         Scanner scan = new Scanner(System.in);
         int filter = scan.nextInt();
-        ArrayList<Car> filteredCars = new ArrayList<>();
-        for (Car car : carsList) {
-            if (car.getBasePrice() < filter) {
-                filteredCars.add(car);
-            }
-        }
+        List<Car> filteredCars = carsList.stream().filter(car -> car.getBasePrice()<filter).collect(Collectors.toList());
 
         showTable();
         for (Car car : filteredCars) {
@@ -311,13 +306,7 @@ public class Shop {
         System.out.println("Enter minimum amount: ");
         Scanner scan = new Scanner(System.in);
         int filter = scan.nextInt();
-        ArrayList<Car> filteredCars = new ArrayList<>();
-        for (Car car : carsList) {
-            if (car.getBasePrice() > filter) {
-                filteredCars.add(car);
-            }
-        }
-
+        List<Car> filteredCars = carsList.stream().filter(car -> car.getBasePrice()>filter).collect(Collectors.toList());
         showTable();
         for (Car car : filteredCars) {
             car.printCar();
@@ -326,10 +315,21 @@ public class Shop {
     }
 
     public void filterByDescending() {
+        List<Car> filteredCars = carsList.stream().sorted(Comparator.comparingInt(Car::getBasePrice).reversed()).collect(Collectors.toList());
+        showTable();
+        for (Car car : filteredCars) {
+            car.printCar();
+            System.out.println();
+        }
     }
 
     public void filterByAscending() {
-
+        List<Car> filteredCars = carsList.stream().sorted(Comparator.comparingInt(Car::getBasePrice)).collect(Collectors.toList());
+        showTable();
+        for (Car car : filteredCars) {
+            car.printCar();
+            System.out.println();
+        }
     }
 
     public void showCarsByEngineType() {
@@ -339,12 +339,11 @@ public class Shop {
         List<Car> filteredCars = getFilterCarsByEngine(filter);
         ArrayList<String> engineOptions = new ArrayList<>();
         if (filteredCars.isEmpty()) {
-            for (Car car: carsList) {
+            for (Car car : carsList) {
                 engineOptions.add(car.getEngine().getType());
             }
             showOtherOptions(engineOptions);
         } else {
-            showTable();
             printFilterCarsByEngine(filter);
         }
     }
@@ -354,71 +353,69 @@ public class Shop {
         Scanner scan = new Scanner(System.in);
         if (cars.isEmpty()) {
             System.out.println("We do not have this car!");
-        } else if (cars.size()==1) {
+        } else if (cars.size() == 1) {
             System.out.println("How many days would you like to rent the car?");
             int numberOfDays = scan.nextInt();
             cars.get(0).rentCar(numberOfDays);
             System.out.println("Now we will need your personal data. Dont worry, we are GDPR compliant!");
             cars.get(0).createCustomer();
-            if (cars.get(0).calculateMoney(numberOfDays)){
+            if (cars.get(0).calculateMoney(numberOfDays)) {
                 System.out.println("Sufficient funds!");
-            System.out.println("Thank you for you purchase");
-            System.out.println("You successfully rented our " + cars.get(0).getMake() + " with the price of " + cars.get(0).getBasePrice() +" dollars per day until "+cars.get(0).getState().getRentedUntil().getTime() +".");
-                cars.get(0).getState().setRented(true);}
-                else {
-                System.out.println("Take a look at the other cars!");
-                    listAllCars();
-            }
+                System.out.println("Thank you for you purchase");
+                System.out.println("You successfully rented our " + cars.get(0).getMake() + " with the price of " + cars.get(0).getBasePrice() + " dollars per day until " + cars.get(0).getState().getRentedUntil().getTime() + ".");
+                cars.get(0).getState().setRented(true);
             } else {
+                System.out.println("Take a look at the other cars!");
+                listAllCars();
+            }
+        } else {
             System.out.println("Which car do you want to rent?");
             printAvailableCarsByMake(nameOfTheCar);
             int answer = scan.nextInt();
             System.out.println("How many days would you like to rent the car?");
             int numberOfDays = scan.nextInt();
-            cars.get(answer-1).rentCar(numberOfDays);
+            cars.get(answer - 1).rentCar(numberOfDays);
             System.out.println("Now we will need your personal data. Dont worry, we are GDPR compliant!");
-            cars.get(answer-1).createCustomer();
-            if (cars.get(answer-1).calculateMoneyWithAList(numberOfDays,answer-1)){
+            cars.get(answer - 1).createCustomer();
+            if (cars.get(answer - 1).calculateMoneyWithAList(numberOfDays, answer - 1)) {
                 System.out.println("Sufficient funds!");
-            System.out.println("Thank you for you purchase");
-            cars.get(answer-1).getState().setRented(true);
-            System.out.println("You successfully rented our " + cars.get(answer-1).getMake() + " with the price of " + cars.get(answer-1).getBasePrice() +" dollars per day until "+cars.get(answer-1).getState().getRentedUntil().getTime() +".");
+                System.out.println("Thank you for you purchase");
+                cars.get(answer - 1).getState().setRented(true);
+                System.out.println("You successfully rented our " + cars.get(answer - 1).getMake() + " with the price of " + cars.get(answer - 1).getBasePrice() + " dollars per day until " + cars.get(answer - 1).getState().getRentedUntil().getTime() + ".");
 
-        } else {
-            listAllCars();
+            } else {
+                listAllCars();
             }
         }
-        }
+    }
 
 
     public void returnACar() {
         List<Car> cars = getRentedCars();
         Scanner scan = new Scanner(System.in);
-        if (cars.isEmpty()){
+        if (cars.isEmpty()) {
             System.out.println("We haven't rented any cars yet!");
-        } else if (cars.size()==1){
-            System.out.println("You successfully called back our " + cars.get(0).getMake()+".");
+        } else if (cars.size() == 1) {
+            System.out.println("You successfully called back our " + cars.get(0).getMake() + ".");
             cars.get(0).returnCar();
         } else {
             System.out.println("These are our rented cars!");
             System.out.println("Which care do you want to callback?");
             printRentedCars();
             int answer = scan.nextInt();
-            cars.get(answer-1).returnCar();
-            System.out.println("You successfully called back our " + cars.get(0).getMake()+".");
+            cars.get(answer - 1).returnCar();
+            System.out.println("You successfully called back our " + cars.get(0).getMake() + ".");
 
         }
     }
-    public List<Car> getRentedCars(){
-        ArrayList<Car> rentedCars = new ArrayList<>();
-        for (Car car: carsList ){
-            if(car.getState().isRented()){
-                rentedCars.add(car);
-            }
-        }
-        return rentedCars;
+
+    public List<Car> getRentedCars() {
+        return carsList.stream()
+                .filter(car -> car.getState().isRented())
+                .collect(Collectors.toList());
     }
-    public void printRentedCars(){
+
+    public void printRentedCars() {
         showTable();
         for (Car car : getRentedCars()) {
             car.printCar();
@@ -427,19 +424,15 @@ public class Shop {
     }
 
 
-
     public List<Car> getAvailableCarsByMake(String carMake) {
-        ArrayList<Car> filteredCars = new ArrayList<>();
-        for (Car car : carsList) {
-            if (car.getMake().toLowerCase().contains(carMake.toLowerCase()) && !car.getState().isRented() && !carMake.isEmpty()) {
-                filteredCars.add(car);
-            }
-        }
-        return filteredCars;
+        return carsList.stream()
+                            .filter(car -> car.getMake().toLowerCase().contains(carMake.toLowerCase()) && !car.getState().isRented() && !carMake.isEmpty())
+                            .collect(Collectors.toList());
     }
-    public void printAvailableCarsByMake(String carMake){
+
+    public void printAvailableCarsByMake(String carMake) {
         showTable();
-        for (Car car: getAvailableCarsByMake(carMake)) {
+        for (Car car : getAvailableCarsByMake(carMake)) {
             car.printCar();
             System.out.println();
         }
@@ -454,43 +447,38 @@ public class Shop {
         }
         return filteredCars;
     }
-    public void printFilterCarsByMake(String carMake){
+
+    public void printFilterCarsByMake(String carMake) {
         showTable();
-        for (Car car: getFilterCarsByMake(carMake)) {
+        for (Car car : getFilterCarsByMake(carMake)) {
             car.printCar();
             System.out.println();
         }
     }
 
     public List<Car> getFilterCarsByModel(String carModel) {
-        ArrayList<Car> filteredCars = new ArrayList<>();
-        for (Car car : carsList) {
-            if (car.getMake().equalsIgnoreCase(carModel)) {
-                filteredCars.add(car);
-            }
-        }
-        return filteredCars;
+        return carsList.stream()
+                            .filter(car -> car.getModel().equalsIgnoreCase(carModel))
+                            .collect(Collectors.toList());
     }
-    public void printFilterCarsByModel(String carModel){
+
+    public void printFilterCarsByModel(String carModel) {
         showTable();
-        for (Car car: getAvailableCarsByMake(carModel)) {
+        for (Car car : getFilterCarsByModel(carModel)) {
             car.printCar();
             System.out.println();
         }
     }
 
     public List<Car> getFilterCarsByEngine(String carEngine) {
-        ArrayList<Car> filteredCars = new ArrayList<>();
-        for (Car car : carsList) {
-            if (car.getMake().equalsIgnoreCase(carEngine)) {
-                filteredCars.add(car);
-            }
-        }
-        return filteredCars;
+        return carsList.stream()
+                .filter(car -> car.getEngine().getType().equalsIgnoreCase(carEngine))
+                .collect(Collectors.toList());
     }
-    public void printFilterCarsByEngine(String carEngine){
+
+    public void printFilterCarsByEngine(String carEngine) {
         showTable();
-        for (Car car: getAvailableCarsByMake(carEngine)) {
+        for (Car car : getFilterCarsByEngine(carEngine)) {
             car.printCar();
             System.out.println();
         }
@@ -503,6 +491,7 @@ public class Shop {
         System.out.println();
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
+
     public void showOtherOptions(ArrayList<String> options) {
         System.out.println("We do not have that options");
         System.out.println("We only have these options : " + options.stream().distinct().collect(Collectors.toList()));
