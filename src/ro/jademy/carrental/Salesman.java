@@ -6,7 +6,7 @@ public class Salesman extends Person{
    private String user;
    private String password;
 
-   public Salesman (String firstName,String lastName,String user,String password){
+   public Salesman (String firstName,String lastName,String user,String pass){
     super(firstName,lastName);
     this.user = user;
     this.password = password;
